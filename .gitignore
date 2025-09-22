@@ -1,0 +1,37 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+dist/
+build/
+
+# --- Virtualenv ---
+.env/
+.venv/
+venv/
+ENV/
+
+# --- IDE / Éditeurs ---
+.vscode/
+.idea/
+*.swp
+
+# --- Logs / sorties ---
+*.log
+*.out
+*.tmp
+
+# --- Config générés ---
+Profiles_custom.ini
+*.ini.bak
+
+# --- Images temporaires ---
+screenshot.png
+*.bmp
+
+# --- OS ---
+.DS_Store
+Thumbs.db
