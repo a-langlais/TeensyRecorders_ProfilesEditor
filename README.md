@@ -67,9 +67,10 @@ Lancer l’application avec :
 python configurator.py
 ```
 
-L’application ouvrira Profiles.ini depuis le dossier initial_profile/. Ce fichier ne doit pas être modifié.
+L’application ouvrira `Profiles.ini` depuis le dossier `initial_profile/`. Ce fichier ne doit pas être modifié.
 
 Vous pouvez alors :
+
 * Modifier les paramètres
 * Naviguer entre les profils sans perdre vos changements
-* Sauvegarder le profil actif dans un nouveau fichier .ini
+* Sauvegarder le profil actif dans un nouveau fichier `.ini`
