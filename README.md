@@ -16,9 +16,7 @@ Un petit utilitaire graphique en **Python + DearPyGui** pour éditer et sauvegar
   - `THSensorEnable` et `GPSenable` (0 ou 1)
 - Conservation des modifications en mémoire quand on change de profil (avant sauvegarde)
 - Sauvegarde dans un nouveau fichier `.ini`
-- Interface simple avec thème clair
-
-## 🖥️ Aperçu
+- ## 🖥️ Aperçu
 
 - Sélecteur de profil (2 à 5)
 - Champs de configuration avec menus déroulants ou saisie directe
