@@ -22,10 +22,10 @@ Un petit utilitaire graphique en **Python + DearPyGui** pour éditer et sauvegar
 Le dernier executable Windows (`*.exe`) est disponible [dans le dossier `dist/` du repo](https://github.com/a-langlais/TeensyRecorders_ProfilesEditor/tree/main/dist)
 
 Par défaut, les TeensyRecorders utilisent un fichier `Profiles.ini` statique composé de 5 profils, dont le premier n'est pas éditable par mesure de sécurité.
-Le projet est pensé pour fonctionner aussi bien en **mode script** qu’en **standalone compilé.
+Le projet est pensé pour fonctionner aussi bien en **mode script** qu’en **standalone compilé**.
 
 <p align="center">
-    <img src="img/screen.png" alt="Interface du programme" width="90%" />
+    <img src="img/screen.png" alt="Interface du programme" width="60%" />
 </p>
 
 ## ✨ Fonctionnalités
@@ -50,14 +50,15 @@ Le projet est pensé pour fonctionner aussi bien en **mode script** qu’en **st
 ```bash
 TeensyRecorders_ProfilesEditor/
 ├── app/                   
-│   └── TR_configurator.py # Application principale (DearPyGui)
-├── dist/                  # Dernière distribution
-├── compiler/              # Script de build
-├── fonts/                 # Polices utilisées
-├── img/                   # Ressources graphiques
-├── initial_profile/       # Fichiers de configuration par défaut
+│   └── TR_configurator.py    # Application principale (DearPyGui)
+├── dist/                     # Dernière distribution
+├── compiler/                 # Script de build
+├── fonts/                    # Polices utilisées
+├── img/                      # Ressources graphiques
+├── initial_profile/          # Fichiers de configuration par défaut
 │
-├── .gitignore            
+├── .gitignore  
+├── requirements.txt          
 └── README.md              
 ```
 
