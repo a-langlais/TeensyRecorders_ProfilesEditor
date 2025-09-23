@@ -18,16 +18,12 @@
   </a>
 </p>
 
-Un petit utilitaire graphique en **Python + DearPyGui** pour éditer et sauvegarder facilement les fichiers `Profiles.ini` utilisés par les enregistreurs [TeensyRecorders](https://framagit.org/PiBatRecorderPojects/TeensyRecorders).
+Un petit utilitaire graphique en **Python + DearPyGui** pour éditer et sauvegarder facilement les fichiers `Profiles.ini` utilisés par les enregistreurs [TeensyRecorders](https://framagit.org/PiBatRecorderPojects/TeensyRecorders).<br>
+Le dernier executable Windows (`*.exe`) est disponible [dans le dossier `dist/` du repo](https://github.com/a-langlais/TeensyRecorders_ProfilesEditor/tree/main/dist)<br>
 
 
-Le dernier executable Windows (`*.exe`) est disponible [dans le dossier `dist/` du repo](https://github.com/a-langlais/TeensyRecorders_ProfilesEditor/tree/main/dist)
-
-
-Par défaut, les TeensyRecorders utilisent un fichier `Profiles.ini` statique composé de 5 profils, dont le premier n'est pas éditable par mesure de sécurité.
-
-
-Le projet est pensé pour fonctionner aussi bien en **mode script** qu’en **standalone compilé**.
+Par défaut, les TeensyRecorders utilisent un fichier `Profiles.ini` statique composé de 5 profils, dont le premier n'est pas éditable par mesure de sécurité.<br>
+Le projet est pensé pour fonctionner aussi bien en **mode script** qu’en **standalone compilé**.<br>
 
 <p align="center">
     <img src="img/screen.png" alt="Interface du programme" width="60%" />
@@ -75,24 +71,12 @@ Lancer directement l'application compilée (Windows, `*.exe`), disponible dans l
 
 **Dernière version** : 0.1 (2025-09)
 
-✨ Fonctionnalités :
-
-
-✅ Interface graphique avec DearPyGui
-
-
-✅ Sélection et édition des profils 2 à 5
-
-
-✅ Validation automatique des champs (tailles, formats, bornes min/max)
-
-
-✅ Sauvegarde dans un fichier `.ini` prêt à être chargé sur un TeensyRecorders
-
-
-✅ Support des chemins relatifs et compilation standalone
-
-
+✨ Fonctionnalités :<br>
+✅ Interface graphique avec DearPyGui<br>
+✅ Sélection et édition des profils 2 à 5<br>
+✅ Validation automatique des champs (tailles, formats, bornes min/max)<br>
+✅ Sauvegarde dans un fichier `.ini` prêt à être chargé sur un TeensyRecorders<br>
+✅ Support des chemins relatifs et compilation standalone<br>
 
 ### 🛠️ Mode développement
 
