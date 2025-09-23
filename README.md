@@ -20,9 +20,12 @@
 
 Un petit utilitaire graphique en **Python + DearPyGui** pour éditer et sauvegarder facilement les fichiers `Profiles.ini` utilisés par les enregistreurs [TeensyRecorders](https://framagit.org/PiBatRecorderPojects/TeensyRecorders).
 
+
 Le dernier executable Windows (`*.exe`) est disponible [dans le dossier `dist/` du repo](https://github.com/a-langlais/TeensyRecorders_ProfilesEditor/tree/main/dist)
 
+
 Par défaut, les TeensyRecorders utilisent un fichier `Profiles.ini` statique composé de 5 profils, dont le premier n'est pas éditable par mesure de sécurité.
+
 
 Le projet est pensé pour fonctionner aussi bien en **mode script** qu’en **standalone compilé**.
 
@@ -73,11 +76,23 @@ Lancer directement l'application compilée (Windows, `*.exe`), disponible dans l
 **Dernière version** : 0.1 (2025-09)
 
 ✨ Fonctionnalités :
+
+
 ✅ Interface graphique avec DearPyGui
+
+
 ✅ Sélection et édition des profils 2 à 5
+
+
 ✅ Validation automatique des champs (tailles, formats, bornes min/max)
+
+
 ✅ Sauvegarde dans un fichier `.ini` prêt à être chargé sur un TeensyRecorders
+
+
 ✅ Support des chemins relatifs et compilation standalone
+
+
 
 ### 🛠️ Mode développement
 
