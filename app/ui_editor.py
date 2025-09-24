@@ -1,10 +1,7 @@
 import re
 from pathlib import Path
-from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit,
-    QComboBox, QPushButton, QFileDialog, QMessageBox, QFormLayout, QTabWidget, QFrame
-)
-from PySide6.QtGui import QPixmap, QFont, QIntValidator
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QComboBox, QPushButton, QFileDialog, QMessageBox, QFormLayout, QTabWidget, QFrame
+from PySide6.QtGui import QPixmap, QFont, QIntValidator, QDoubleValidator
 from PySide6.QtCore import Qt
 
 from ini_utils import load_profiles, get_value, update_value, save_profiles
@@ -110,7 +107,7 @@ class ProfileEditor(QWidget):
         separator.setFrameShadow(QFrame.Sunken)
 
         layout.addWidget(separator)
-        footer = QLabel(f"(c) Alexandre LANGLAIS - 2025 - v{BUILD_VERSION}")
+        footer = QLabel(f"© Alexandre LANGLAIS - 2025 - v{BUILD_VERSION}")
         footer.setAlignment(Qt.AlignCenter)
         footer.setStyleSheet("color: gray; font-size: 10px;")
         layout.addWidget(footer)
@@ -165,6 +162,14 @@ class ProfileEditor(QWidget):
                     widget.setPlaceholderText(f"Entier {meta['min']}–{meta['max']}")
                     widget.textChanged.connect(lambda v, k=key: self.update_cache(k, v))
 
+                elif meta["type"] == "float":
+                    widget = QLineEdit(val)
+                    validator = QDoubleValidator(meta["min"], meta["max"], 3)  # 3 décimales par défaut
+                    validator.setNotation(QDoubleValidator.StandardNotation)
+                    widget.setValidator(validator)
+                    widget.setPlaceholderText(f"Nombre {meta['min']}–{meta['max']}")
+                    widget.textChanged.connect(lambda v, k=key: self.update_cache(k, v))
+
                 self.inputs[key] = widget
                 form_layout.addRow(QLabel(key), widget)
 
@@ -214,6 +219,20 @@ class ProfileEditor(QWidget):
                     QMessageBox.warning(self, "Erreur", f"{key} doit être entre {meta['min']} et {meta['max']}")
                     return
                 val = str(val_int)
+
+            elif meta["type"] == "float":
+                try:
+                    val_f = float(val)
+                except ValueError:
+                    val_f = meta.get("default", meta["min"])
+                if not (meta["min"] <= val_f <= meta["max"]):
+                    QMessageBox.warning(self, "Erreur", f"{key} doit être entre {meta['min']} et {meta['max']}")
+                    return
+                # arrondi si step défini
+                step = meta.get("step")
+                if step:
+                    val_f = round(round((val_f - meta["min"]) / step) * step + meta["min"], 3)
+                val = str(val_f)
 
             self.lines = update_value(self.lines, section, key, val)
 

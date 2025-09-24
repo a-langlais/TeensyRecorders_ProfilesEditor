@@ -10,7 +10,7 @@ if __name__ == "__main__":
     logo_file = resource_path("img/logo_PR.png")
 
     window = ProfileEditor(str(ini_file), logo_path=str(logo_file))
-    window.resize(500, 400)
+    window.resize(500, 680)
     window.show()
 
     sys.exit(app.exec())
