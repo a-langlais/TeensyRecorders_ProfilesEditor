@@ -55,6 +55,7 @@ def save_profiles(lines, path):
 # ---------------------
 lines = load_profiles(INI_PATH)
 
+# Nom des profils
 PROFILE_LABELS = {
     "Profile 2": "2",
     "Profile 3": "3",
@@ -86,6 +87,17 @@ FIELDS = {
     "THSensorEnable": {"type": "combo", "choices": ["0","1"], "default": "1"},
     "GPSenable": {"type": "combo", "choices": ["0","1"], "default": "0"},
 }
+
+# Groupes de champs
+SECTION_TITLES = {
+    "Profil": ["ProfileName", "OpMode"],
+    "Horaires": ["StartTime", "EndTime"],
+    "Audio": ["SampFreqU", "NumericGain", "StereoMode", "MicrophoneType"],
+    "Fichiers": ["LEDSynchro", "WavPrefix", "MaxFileLength"],
+    "Fréquences": ["MinFreqUS", "MaxFreqUS", "MinLevel", "PreTrigger"],
+    "Capteurs": ["THSensorEnable", "GPSenable"]
+}
+
 
 # ---------------------
 # Cache mémoire
@@ -161,30 +173,39 @@ def show_profile(sender, app_data, user_data):
 
     dpg.delete_item("form_area", children_only = True)
 
-    for key, meta in FIELDS.items():
-        raw_val = get_value(lines, section, key, default = str(meta.get("default","")))
-        val = profile_cache[profile_id].get(key, str(raw_val).strip('"'))
+    for section_name, keys in SECTION_TITLES.items():
+        # Titre de la section
+        with dpg.group(parent = "form_area"):
+            dpg.add_text(section_name, color = (0, 150, 250))
+            dpg.add_separator()
 
-        with dpg.group(horizontal=True, parent = "form_area"):
-            dpg.add_text(f"{key:15}")
-            if meta["type"] == "text":
-                dpg.add_input_text(default_value = val, tag = f"{section}_{key}", width = 200,
-                                   callback = on_value_change, user_data = (profile_id, key, meta))
-                if key in ["ProfileName","WavPrefix"]:
-                    dpg.add_text("", tag = f"{section}_{key}_warn", color = (255, 165, 0), show = False)
+        # Paramètres de la section
+        for key in keys:
+            meta = FIELDS[key]
+            raw_val = get_value(lines, section, key, default = str(meta.get("default", "")))
+            val = profile_cache[profile_id].get(key, str(raw_val).strip('"'))
 
-            elif meta["type"] == "combo":
-                choices = meta["choices"].copy()
-                if val not in choices:
-                    choices.append(val)
-                dpg.add_combo(choices, default_value = val or str(meta.get("default", "0")),
-                              tag=f"{section}_{key}", width = 200,
-                              callback = on_value_change, user_data = (profile_id,key,meta))
+            with dpg.group(horizontal = True, parent = "form_area"):
+                dpg.add_text(f"{key:15}")
+                if meta["type"] == "text":
+                    dpg.add_input_text(default_value = val, tag = f"{section}_{key}", width = 200,
+                                       callback = on_value_change, user_data = (profile_id, key, meta))
+                    if key in ["ProfileName", "WavPrefix"]:
+                        dpg.add_text("", tag = f"{section}_{key}_warn", color = (255, 165, 0), show = False)
 
-            elif meta["type"] == "int":
-                dpg.add_input_text(default_value = val, tag = f"{section}_{key}", width = 100,
-                                   callback = on_value_change, user_data = (profile_id, key, meta))
-                dpg.add_text("", tag = f"{section}_{key}_warn", color = (255, 165, 0), show = False)
+                elif meta["type"] == "combo":
+                    choices = meta["choices"].copy()
+                    if val not in choices:
+                        choices.append(val)
+                    dpg.add_combo(choices, default_value = val or str(meta.get("default", "0")),
+                                  tag = f"{section}_{key}", width=200,
+                                  callback=on_value_change, user_data=(profile_id,key,meta))
+
+                elif meta["type"] == "int":
+                    dpg.add_input_text(default_value = val, tag = f"{section}_{key}", width = 100,
+                                       callback = on_value_change, user_data = (profile_id, key, meta))
+                    dpg.add_text("", tag = f"{section}_{key}_warn", color=(255, 165, 0), show = False)
+
 
 def save_callback():
     global lines
@@ -231,7 +252,7 @@ def save_callback():
 # GUI
 # ---------------------
 dpg.create_context()
-dpg.create_viewport(title="TeensyRecorders Profiles Editor (v0.1)", width = 670, height = 800)
+dpg.create_viewport(title = "TeensyRecorders Profiles Editor (v0.1)", width = 670, height = 900)
 
 with dpg.font_registry():
     dpg.add_font(FONT_PATH, 14, tag = "emoji_font")
@@ -244,7 +265,7 @@ with dpg.texture_registry():
     data = [c/255 for c in image.tobytes()]
     dpg.add_static_texture(width, height, data, tag = "logo_texture")
 
-with dpg.window(tag="PrimaryWindow", width = 700, height = 760,
+with dpg.window(tag = "PrimaryWindow", width = 700, height = 800,
                 no_title_bar = True, no_collapse = True, no_move = True):
 
     # Entête
@@ -266,11 +287,11 @@ with dpg.window(tag="PrimaryWindow", width = 700, height = 760,
                          tag = "profile_selector", callback=show_profile, horizontal = True)
 
     # --- Zone formulaire ---
-    with dpg.child_window(tag = "form_area", width = -1, height = 520):
+    with dpg.child_window(tag = "form_area", width = -1, height = 620):
         pass
 
     # --- Boutons sauvegarde ---
-    with dpg.group(horizontal=True):
+    with dpg.group(horizontal = True):
         dpg.add_text("Nom de fichier de sortie :")
         dpg.add_input_text(default_value = "Profiles_custom.ini", tag = "out_filename", width = 300)
     dpg.add_button(label = "Sauvegarder ce profil", callback = save_callback)
