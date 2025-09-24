@@ -1,3 +1,6 @@
 dearpygui==2.1.0
 Pillow==11.3.0
 PyInstaller==6.16.0
+pyside6==6.9.2
+pyside6_addons==6.9.2
+pyside6_essentials==6.9.2
