@@ -1,11 +1,11 @@
 import re
 from pathlib import Path
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QComboBox, QPushButton, QFileDialog, QMessageBox, QFormLayout, QTabWidget, QFrame
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QComboBox, QPushButton, QFileDialog, QMessageBox, QFormLayout, QTabWidget, QFrame, QToolTip
 from PySide6.QtGui import QPixmap, QFont, QIntValidator, QDoubleValidator
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QLocale
 
 from ini_utils import load_profiles, get_value, update_value, save_profiles
-from config import FIELDS, SECTION_TITLES, PROFILE_LABELS, BUILD_VERSION
+from config import FIELDS, SECTION_TITLES, PROFILE_LABELS, BUILD_VERSION, SUBTITLES
 
 class ProfileEditor(QWidget):
     def __init__(self, ini_path, logo_path="img/logo_PR.png"):
@@ -39,7 +39,7 @@ class ProfileEditor(QWidget):
         title.setFont(QFont("Arial", 16, QFont.Bold))
         desc = QLabel(
             "Outil pour éditer et sauvegarder facilement vos fichiers Profiles.ini.\n"
-            "Compatible avec les profils 2 à 5, avec validation automatique des valeurs."
+            "Edition des profils avec validation automatique des valeurs."
         )
         desc.setWordWrap(True)
         text_layout.addWidget(title)
@@ -107,7 +107,7 @@ class ProfileEditor(QWidget):
         separator.setFrameShadow(QFrame.Sunken)
 
         layout.addWidget(separator)
-        footer = QLabel(f"© Alexandre LANGLAIS - 2025 - v{BUILD_VERSION}")
+        footer = QLabel(f"© Alexandre LANGLAIS - 2026 - v{BUILD_VERSION}")
         footer.setAlignment(Qt.AlignCenter)
         footer.setStyleSheet("color: gray; font-size: 10px;")
         layout.addWidget(footer)
@@ -128,6 +128,52 @@ class ProfileEditor(QWidget):
     def update_cache(self, key, value):
         self.cache[self.profile_id][key] = str(value).strip()
 
+    # --- Sous-titre ---
+    def add_subtitle(self, form_layout, text):
+        label = QLabel(text)
+        label.setStyleSheet("""
+            QLabel {
+                font-weight: bold;
+                margin-top: 12px;
+                margin-bottom: 6px;
+            }
+        """)
+        form_layout.addRow(label)
+
+    # Label avec helper
+    def make_label_with_helper(self, key: str):
+        meta = FIELDS.get(key, {})
+        text = meta.get("tag", key)
+        helper = meta.get("helper", "")
+
+        container = QWidget()
+        row = QHBoxLayout(container)
+        row.setContentsMargins(0, 0, 0, 0)
+        row.setSpacing(6)
+
+        label = QLabel(text)
+        row.addWidget(label)
+
+        if helper:
+            info = QLabel("i")
+            info.setToolTip(helper)
+            info.setFixedSize(16, 16)
+            info.setAlignment(Qt.AlignCenter)
+            info.setStyleSheet("""
+                QLabel {
+                    color: white;
+                    background-color: #2b78ff;
+                    border-radius: 8px;
+                    font-weight: bold;
+                    font-size: 11px;
+                }
+            """)
+            row.addWidget(info)
+
+        row.addStretch(1)
+        return container
+
+
     # --- Formulaire ---
     def build_form(self):
         self.inputs.clear()
@@ -138,7 +184,23 @@ class ProfileEditor(QWidget):
         for section_name, keys in SECTION_TITLES.items():
             group = QWidget()
             form_layout = QFormLayout()
+
+            # -------- Sous-titre en tête d'un onglet
+            title = SUBTITLES.get((section_name, None))
+            if title:
+                self.add_subtitle(form_layout, title)
+            # ---------------------------------------
+
             for key in keys:
+
+                # -------- Sous-titre dans les onglets
+                title = SUBTITLES.get((section_name, key))
+                if title:
+                    self.add_subtitle(form_layout, title)
+
+                meta = FIELDS[key]
+                # ---------------------------------------
+
                 meta = FIELDS[key]
                 val = self.cache[pid].get(
                     key, get_value(self.lines, f"Profile_{pid}", key, str(meta.get("default", "")))
@@ -149,6 +211,11 @@ class ProfileEditor(QWidget):
                     if key in ["StartTime", "EndTime"]:
                         widget.setPlaceholderText("HH:MM")
                     widget.textChanged.connect(lambda v, k=key: self.update_cache(k, v))
+
+                elif key in ["StartDate", "EndDate"]: # Autoriser "--/--" ou "jj/mm"
+                    if val and val != "--/--" and not re.match(r"^(0[1-9]|[12]\d|3[01])/(0[1-9]|1[0-2])$", val):
+                        QMessageBox.warning(self, "Erreur", f"{key} doit être au format JJ/MM ou --/--")
+                        return
 
                 elif meta["type"] == "combo":
                     widget = QComboBox()
@@ -164,14 +231,22 @@ class ProfileEditor(QWidget):
 
                 elif meta["type"] == "float":
                     widget = QLineEdit(val)
-                    validator = QDoubleValidator(meta["min"], meta["max"], 3)  # 3 décimales par défaut
+                    decimals = 6 if key in ("Latitude", "Longitude") else 3 # 3 décimales par défaut sauf pour les coordonnées GPS
+                    validator = QDoubleValidator(meta["min"], meta["max"], decimals)
                     validator.setNotation(QDoubleValidator.StandardNotation)
+
+                    if key in ("Latitude", "Longitude"):
+                        validator.setLocale(QLocale.c())  # locale "C" => '.' comme séparateur
+                        widget.setPlaceholderText("Coordonnées WGS84 avec point décimal")
+                    else:
+                        # Optionnel : garder la locale système pour les autres floats
+                        validator.setLocale(QLocale.system())
+    
                     widget.setValidator(validator)
-                    widget.setPlaceholderText(f"Nombre {meta['min']}–{meta['max']}")
                     widget.textChanged.connect(lambda v, k=key: self.update_cache(k, v))
 
                 self.inputs[key] = widget
-                form_layout.addRow(QLabel(key), widget)
+                form_layout.addRow(self.make_label_with_helper(key), widget)
 
             group.setLayout(form_layout)
             self.tabs.addTab(group, section_name)
@@ -194,7 +269,7 @@ class ProfileEditor(QWidget):
         pid = self.profile_id
 
         for key, meta in FIELDS.items():
-            val = self.cache[pid].get(key, "")
+            val = self.cache[pid].get(key, get_value(self.lines, section, key, str(meta.get("default", ""))))
 
             if meta["type"] == "text":
                 if key in ["ProfileName", "WavPrefix"]:
@@ -221,6 +296,7 @@ class ProfileEditor(QWidget):
                 val = str(val_int)
 
             elif meta["type"] == "float":
+                val = (val or "").strip().replace(",", ".") # On accepte les virgules dans la saisie
                 try:
                     val_f = float(val)
                 except ValueError:
@@ -231,7 +307,8 @@ class ProfileEditor(QWidget):
                 # arrondi si step défini
                 step = meta.get("step")
                 if step:
-                    val_f = round(round((val_f - meta["min"]) / step) * step + meta["min"], 3)
+                    decimals = 6 if key in ("Latitude","Longitude") else 3
+                    val_f = round(round((val_f - meta["min"]) / step) * step + meta["min"], decimals)
                 val = str(val_f)
 
             self.lines = update_value(self.lines, section, key, val)
