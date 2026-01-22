@@ -2,6 +2,24 @@
 
 Toutes les modifications notables du projet sont documentées ici.
 
+## [0.4] - 2026-01-22
+### Ajouté
+- Prise en charge complète des nouveaux paramètres introduits dans la version 1.03 :
+  - **Fenêtre calendaire** : `StartDate`, `EndDate`
+  - **Calcul solaire automatique** : `AutoStartStop`, `Latitude`, `Longitude`, `TUOffset`, `StartStopOffset`
+  - **Gestion des fichiers** : `ZCFile`
+  - **Alimentation** : `PowerBank`
+- Support explicite des coordonnées GPS avec saisie décimale au format point (`.`), indépendant de la locale système.
+- Chaque paramètre a maintenant une petite icone "information" qui donne une description brève du paramètre.
+
+### Changé
+- Amélioration de la gestion des placeholders (horaires, valeurs numériques).
+- Les paramètres ont maintenant des noms clairs et compréhensibles
+- Les paramètres ont été réorganisés sous formes de sous-groupes plus clairs
+
+## Corrigé
+- Quelques paramètres avaient un ordre incohérent.
+
 ---
 
 ## [0.3] - 2025-09-25
