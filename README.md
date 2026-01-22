@@ -32,8 +32,8 @@ Le projet est pensé pour fonctionner aussi bien en **mode script** qu’en **st
 
 ## ✨ Fonctionnalités
 
-- ⚙️ Édition des **profils 2 à 5** (le profil 1 reste réservé au firmware)
-- 🛡️ Validation automatique :
+- Édition des **profils 2 à 5** (le profil 1 reste réservé au firmware)
+- Validation automatique :
   - `ProfileName` → ≤ 11 caractères, alphanumérique, `_` et `-` autorisés
   - `WavPrefix` → ≤ 5 caractères
   - `StartTime` / `EndTime` → format `HH:MM`
@@ -42,10 +42,8 @@ Le projet est pensé pour fonctionner aussi bien en **mode script** qu’en **st
   - `MinLevel` → 0–100 dB (par défaut 15)
   - `PreTrigger` → 0–10
   - `THSensorEnable` et `GPSenable` → 0 ou 1
-- 📂 Sélection du **dossier de sortie**
-- 💾 Choix du **nom du fichier de sortie** (par défaut `Profiles_custom.ini`)
-- 🎨 Interface Qt moderne (PySide6)
-- 🔗 Lien intégré vers la [documentation officielle TeensyRecorders](https://framagit.org/PiBatRecorderPojects/TeensyRecorders)
+- Sélection du **dossier de sortie**
+- Choix du **nom du fichier de sortie** (par défaut `Profiles_custom.ini`)
 
 ---
 
@@ -77,7 +75,7 @@ TeensyRecorders_ProfilesEditor/
 
 Lancer directement l’application compilée (Windows, `*.exe`), disponible dans le dossier `dist/`.
 
-**Dernière version** : 0.2 (2025-09)
+**Dernière version** : 0.4 (2026-01) - Compatible avec le firmware 1.03 des TR
 
 Etape pour charger les programmes :
 
