@@ -79,7 +79,7 @@ Lancer directement l’application compilée (Windows, `*.exe`), disponible dans
 
 Etape pour charger les programmes :
 
-- Une fois votre `*.ini` généré, déplacer le fichier sur la carte SD de l'appareil. 
+- Une fois votre `*.ini` généré, déplacer le fichier sur la carte SD de l'appareil.
 - Sur le menu principal, se déplacer sur `Modif. des profils` tout en bas
 - Cliquer sur `Lect. fic. Profiles` et sélectionner le fichier généré
 - Après retour au menu principal, sélectionner le profil voulu via la section `Profil`
@@ -104,7 +104,7 @@ pip install -r requirements.txt
 Lancer en mode développement :
 
 ```bash
-python -m app.main
+PYTHONPATH=app python app/main.py
 ```
 
 Compiler directement l’application en `*.exe` :
