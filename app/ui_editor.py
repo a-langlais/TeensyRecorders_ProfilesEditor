@@ -1,11 +1,83 @@
 import re
 from pathlib import Path
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QComboBox, QPushButton, QFileDialog, QMessageBox, QFormLayout, QTabWidget, QFrame, QToolTip
-from PySide6.QtGui import QPixmap, QFont, QIntValidator, QDoubleValidator
-from PySide6.QtCore import Qt, QLocale
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QComboBox, QPushButton, QFileDialog, QMessageBox, QFormLayout, QTabWidget, QFrame, QToolTip, QApplication
+from PySide6.QtGui import QPixmap, QFont, QIntValidator, QDoubleValidator, QCursor
+from PySide6.QtCore import Qt, QLocale, QTimer, QEvent
 
 from ini_utils import load_profiles, get_value, update_value, save_profiles
 from config import FIELDS, SECTION_TITLES, PROFILE_LABELS, BUILD_VERSION, SUBTITLES
+
+
+class HelperPopup(QFrame):
+    def __init__(self, helper: str, source: "HelperLabel"):
+        super().__init__(None, Qt.ToolTip)
+        self._source = source
+        self.setAttribute(Qt.WA_DeleteOnClose)
+        self.setStyleSheet("""
+            QFrame {
+                background-color: #2b78ff;
+                border-radius: 6px;
+            }
+            QLabel {
+                color: white;
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+        """)
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        text = QLabel(helper, self)
+        text.setWordWrap(True)
+        text.setMaximumWidth(280)
+        layout.addWidget(text)
+        self.adjustSize()
+        self.move(source.mapToGlobal(source.rect().bottomLeft()))
+        QApplication.instance().installEventFilter(self)
+
+    def eventFilter(self, obj, event):
+        if event.type() == QEvent.MouseButtonPress:
+            global_pos = event.globalPosition().toPoint()
+            if self.frameGeometry().contains(global_pos):
+                return False
+            local = self._source.mapFromGlobal(global_pos)
+            if self._source.rect().contains(local):
+                return False
+            QTimer.singleShot(0, self.close)
+        return False
+
+    def closeEvent(self, event):
+        if HelperLabel._active is not None and HelperLabel._active[0] is self:
+            HelperLabel._active = None
+        QApplication.instance().removeEventFilter(self)
+        super().closeEvent(event)
+
+
+class HelperLabel(QLabel):
+    _active = None
+
+    def __init__(self, helper: str, parent=None):
+        super().__init__("i", parent)
+        self._helper = helper
+        self.setToolTip(helper)
+        self.setCursor(Qt.PointingHandCursor)
+
+    def mousePressEvent(self, event):
+        active = HelperLabel._active
+        if active is not None:
+            popup, owner = active
+            HelperLabel._active = None
+            popup.close()
+            if owner is self:
+                event.accept()
+                return
+        self.show_popup()
+        event.accept()
+
+    def show_popup(self):
+        popup = HelperPopup(self._helper, self)
+        HelperLabel._active = (popup, self)
+        popup.show()
+
 
 class ProfileEditor(QWidget):
     def __init__(self, ini_path, logo_path="img/logo_PR.png"):
@@ -155,8 +227,7 @@ class ProfileEditor(QWidget):
         row.addWidget(label)
 
         if helper:
-            info = QLabel("i")
-            info.setToolTip(helper)
+            info = HelperLabel(helper)
             info.setFixedSize(16, 16)
             info.setAlignment(Qt.AlignCenter)
             info.setStyleSheet("""
