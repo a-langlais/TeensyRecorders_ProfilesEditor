@@ -23,6 +23,7 @@ ENV/
 *.out
 *.tmp
 *.spec
+release_memo.md
 
 # --- Config générés ---
 Profiles_custom.ini
