@@ -1,8 +1,20 @@
 <p align="center">
-  <img src="img/logo_PR.png" alt="Logo" width="100"/>
+  <img src="img/logo_PR.png" alt="Logo TeensyRecorders Profiles Editor" width="110"/>
 </p>
 
 <h1 align="center">TeensyRecorders Profiles Editor</h1>
+
+<p align="center">
+  Une application graphique simple pour préparer les profils de configuration
+  des enregistreurs TeensyRecorders.
+</p>
+
+<p align="center">
+  <a href="https://github.com/a-langlais/TeensyRecorders_ProfilesEditor/releases/latest">
+    <strong>Télécharger la dernière version</strong>
+  </a>
+</p>
+
 <p align="center">
   <a href="https://www.python.org/">
     <img src="https://img.shields.io/badge/Python-3.9+-blue?logo=python&logoColor=white" alt="Python">
@@ -10,111 +22,115 @@
   <a href="https://pyinstaller.org/">
     <img src="https://img.shields.io/badge/Build-PyInstaller-green" alt="PyInstaller">
   </a>
-  <a href="https://github.com/a-langlais/TeensyRecorders_ProfilesEditor/blob/main/LICENSE">
-    <img src="https://img.shields.io/badge/License-MIT-lightgrey" alt="License">
-  </a>
-  <a href="https://github.com/a-langlais/TeensyRecorders_ProfilesEditor/releases">
-    <img src="https://img.shields.io/badge/Release-v0.2-orange" alt="Release">
+  <img src="https://img.shields.io/badge/Licence-MIT-lightgrey" alt="Licence MIT">
+  <a href="https://github.com/a-langlais/TeensyRecorders_ProfilesEditor/releases/latest">
+    <img src="https://img.shields.io/github/v/release/a-langlais/TeensyRecorders_ProfilesEditor?label=dernière%20version" alt="Dernière version">
   </a>
 </p>
 
-Un petit utilitaire graphique en **Python + PySide6 (Qt)** pour éditer et sauvegarder facilement les fichiers `Profiles.ini` utilisés par les enregistreurs [TeensyRecorders](https://framagit.org/PiBatRecorderPojects/TeensyRecorders).<br>
-Le dernier exécutable Windows (`*.exe`) est disponible [dans le dossier `dist/` du repo](https://github.com/a-langlais/TeensyRecorders_ProfilesEditor/tree/main/dist).<br>
+---
 
-Par défaut, les TeensyRecorders utilisent un fichier `Profiles.ini` statique composé de 5 profils, dont le premier n'est pas éditable par mesure de sécurité.<br>
-Le projet est pensé pour fonctionner aussi bien en **mode script** qu’en **standalone compilé**.<br>
+## Présentation
+
+**TeensyRecorders Profiles Editor** permet de modifier facilement les fichiers
+`Profiles.ini` utilisés par les enregistreurs
+[TeensyRecorders](https://framagit.org/PiBatRecorderPojects/TeensyRecorders).
+
+L'application évite de modifier manuellement un fichier de configuration :
+les paramètres sont regroupés par thème, expliqués dans l'interface et vérifiés
+avant l'enregistrement.
+
+Les TeensyRecorders disposent de cinq profils. Par sécurité, le profil 1 reste
+réservé au firmware. L'application permet de personnaliser les profils 2 à 5.
 
 <p align="center">
-    <img src="img/screen.gif" alt="Interface du programme" />
+  <img src="img/screen.gif" alt="Aperçu de l'interface de TeensyRecorders Profiles Editor"/>
 </p>
 
----
+## Installation
 
-## ✨ Fonctionnalités
+1. Ouvrir la page de la
+   [dernière version disponible](https://github.com/a-langlais/TeensyRecorders_ProfilesEditor/releases/latest).
+2. Télécharger l'archive correspondant à votre système :
+   `windows`, `linux` ou `macos`.
+3. Décompresser l'archive.
+4. Lancer `TeensyProfilesEditor`.
 
-- Édition des **profils 2 à 5** (le profil 1 reste réservé au firmware)
-- Validation automatique :
-  - `ProfileName` → ≤ 11 caractères, alphanumérique, `_` et `-` autorisés
-  - `WavPrefix` → ≤ 5 caractères
-  - `StartTime` / `EndTime` → format `HH:MM`
-  - `MaxFileLength` → 1–999 minutes (par défaut 60)
-  - `MinFreqUS` / `MaxFreqUS` → cohérence des bornes
-  - `MinLevel` → 0–100 dB (par défaut 15)
-  - `PreTrigger` → 0–10
-  - `THSensorEnable` et `GPSenable` → 0 ou 1
-- Sélection du **dossier de sortie**
-- Choix du **nom du fichier de sortie** (par défaut `Profiles_custom.ini`)
+> Les versions macOS et Linux peuvent demander une autorisation d'exécution
+> lors du premier lancement, car l'application n'est pas signée numériquement.
 
----
+## Utilisation
 
-## 📂 Organisation du projet
+1. Choisir un profil parmi les profils 2 à 5.
+2. Modifier les paramètres souhaités dans les différents onglets.
+3. Sélectionner le dossier de destination.
+4. Vérifier ou modifier le nom du fichier de sortie.
+5. Enregistrer le fichier `Profiles_custom.ini`.
 
-```bash
-TeensyRecorders_ProfilesEditor/
-├── app/
-│   ├── main.py          # Point d’entrée de l’application
-│   ├── ui_editor.py     # Interface PySide6
-│   ├── ini_utils.py     # Fonctions utilitaires pour les fichiers INI
-│   └── config.py        # Champs, sections et configuration
-│
-├── compiler/            # Script de build (PyInstaller)
-├── dist/                # Dernière distribution compilée
-├── img/                 # Ressources graphiques (logo, captures)
-├── initial_profile/     # Fichier INI de référence
-│
-├── .gitignore
-├── requirements.txt
-└── README.md
-```
+L'application contrôle les valeurs saisies et propose des valeurs par défaut
+lorsqu'elles sont nécessaires.
 
----
+## Charger le fichier sur un TeensyRecorder
 
-## 📦 Installation
+1. Copier le fichier `.ini` généré sur la carte SD de l'appareil.
+2. Insérer la carte SD dans le TeensyRecorder.
+3. Dans le menu principal, ouvrir `Modif. des profils`.
+4. Choisir `Lect. fic. Profiles`.
+5. Sélectionner le fichier généré.
+6. Revenir au menu principal et sélectionner le profil souhaité dans la section
+   `Profil`.
 
-### ⚡ Application standalone
+## Fonctionnalités principales
 
-Lancer directement l’application compilée (Windows, `*.exe`), disponible dans le dossier `dist/`.
+- Édition des profils 2 à 5.
+- Organisation claire des paramètres par thème.
+- Aide intégrée pour comprendre chaque réglage.
+- Validation des horaires, dates, fréquences, seuils et autres valeurs
+  numériques.
+- Configuration des enregistrements audio et ultrasonores.
+- Réglages du mode hétérodyne.
+- Gestion des options de capteurs, d'alimentation et de calcul solaire.
+- Choix du dossier et du nom du fichier `.ini` généré.
 
-**Dernière version** : 0.4 (2026-01) - Compatible avec le firmware 1.03 des TR
+## Compatibilité
 
-Etape pour charger les programmes :
+La version `0.4` est compatible avec le firmware `1.03` des TeensyRecorders.
 
-- Une fois votre `*.ini` généré, déplacer le fichier sur la carte SD de l'appareil. 
-- Sur le menu principal, se déplacer sur `Modif. des profils` tout en bas
-- Cliquer sur `Lect. fic. Profiles` et sélectionner le fichier généré
-- Après retour au menu principal, sélectionner le profil voulu via la section `Profil`
+Les évolutions détaillées sont consultables dans le
+[journal des modifications](CHANGELOG.md).
 
----
+## Développement
 
-### 🛠️ Mode développement
-
-Cloner le projet :
+Le projet est écrit en Python avec PySide6 (Qt). Pour le lancer depuis les
+sources :
 
 ```bash
 git clone https://github.com/a-langlais/TeensyRecorders_ProfilesEditor.git
 cd TeensyRecorders_ProfilesEditor
+pip install .
+python app/main.py
 ```
 
-Installer les dépendances :
+Pour construire l'application localement avec PyInstaller :
 
 ```bash
-pip install -r requirements.txt
-```
-
-Lancer en mode développement :
-
-```bash
-python -m app.main
-```
-
-Compiler directement l’application en `*.exe` :
-
-```bash
+pip install ".[build]"
 python compiler/compiler.py
 ```
 
----
+## Structure du projet
 
-## 📜 Licence
+```text
+TeensyRecorders_ProfilesEditor/
+├── app/                  # Code de l'application
+├── compiler/             # Scripts de construction
+├── img/                  # Logo et captures d'écran
+├── initial_profile/      # Profil de référence
+├── CHANGELOG.md          # Historique des versions
+├── pyproject.toml        # Configuration et dépendances Python
+└── README.md
+```
+
+## Licence
 
 Projet distribué sous licence MIT.
