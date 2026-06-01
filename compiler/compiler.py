@@ -17,7 +17,7 @@ def parse_args():
 
 args = parse_args()
 
-PyInstaller.__main__.run([
+pyinstaller_args = [
     os.path.join(ROOT_DIR, "app", "main.py"),
     "--onefile",
     "--noconsole",
@@ -28,6 +28,10 @@ PyInstaller.__main__.run([
     f"--specpath={args.spec_dir}",
     f"--add-data={os.path.join(ROOT_DIR,'initial_profile')}{sep}initial_profile",
     f"--add-data={os.path.join(ROOT_DIR,'img')}{sep}img",
-    f"--icon={os.path.join(ROOT_DIR,'img','logo_PR_ico.ico')}",
     f"--paths={os.path.join(ROOT_DIR, 'app')}"
-])
+]
+
+if os.name == "nt":
+    pyinstaller_args.append(f"--icon={os.path.join(ROOT_DIR,'img','logo_PR_ico.ico')}")
+
+PyInstaller.__main__.run(pyinstaller_args)
