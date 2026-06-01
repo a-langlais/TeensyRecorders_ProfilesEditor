@@ -79,4 +79,9 @@ jobs:
       - name: Publish release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" release-assets/*.zip --generate-notes
+          GH_REPO: ${{ github.repository }}
+          RELEASE_NOTES: |
+            Cette version n'apporte aucun changement majeur à l'application.
+            Elle ajoute l'automatisation des releases GitHub ainsi que la version macOS,
+            en complément des versions Windows et Linux.
+        run: gh release create "$GITHUB_REF_NAME" release-assets/*.zip --notes "$RELEASE_NOTES"
