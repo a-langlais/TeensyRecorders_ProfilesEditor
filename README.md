@@ -23,9 +23,6 @@
     <img src="https://img.shields.io/badge/Build-PyInstaller-green" alt="PyInstaller">
   </a>
   <img src="https://img.shields.io/badge/Licence-MIT-lightgrey" alt="Licence MIT">
-  <a href="https://github.com/a-langlais/TeensyRecorders_ProfilesEditor/releases/latest">
-    <img src="https://img.shields.io/github/v/release/a-langlais/TeensyRecorders_ProfilesEditor?label=dernière%20version" alt="Dernière version">
-  </a>
 </p>
 
 ---
